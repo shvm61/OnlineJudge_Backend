@@ -3,15 +3,15 @@ const app = express();
 const morgan = require("morgan");
 const port = process.env.PORT || 8000;
 require("dotenv").config();
-// const db = require("./config/mongoose");
+const db = require("./config/mongoose");
 const passport = require("passport");
-// const passportJWT = require("./config/passport-jwt-strategy.js");
+const passportJWT = require("./config/passport-jwt-strategy.js");
 
 app.use(morgan("dev"));
 app.use(express.urlencoded());
 app.use(express.json());
 
-// app.use(passport.initialize());
+app.use(passport.initialize());
 app.use("/api", require("./routes"));
 
 app.listen(port, function (err) {
