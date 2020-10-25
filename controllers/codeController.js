@@ -10,7 +10,7 @@ module.exports.codeCompile = async (req, res) => {
     const lang = req.body.lang;
     const input = req.body.input;
 
-    let code = await Code.create(req.body);
+    let codeD = await Code.create(req.body);
     let file, command, fileNameWithoutExt;
     // console.log(code);
     if (lang === "cpp") {
@@ -40,7 +40,26 @@ module.exports.codeCompile = async (req, res) => {
         output: stdout,
         stderror: stderr,
         error: err,
+        id: codeD.id,
       });
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      error,
+    });
+  }
+};
+
+module.exports.getCodeById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    // console.log(id);
+    let code = await Code.findById(id);
+    return res.status(200).json({
+      success: true,
+      code,
     });
   } catch (error) {
     console.log(error);
