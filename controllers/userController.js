@@ -56,7 +56,6 @@ module.exports.signUp = async (req, res) => {
 
 module.exports.login = async (req, res) => {
   try {
-    console.log(req.body);
     const errors = {};
     if (!validator.isEmail(req.body.email.trim()))
       errors.email = "Email is not valid";
