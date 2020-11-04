@@ -56,6 +56,7 @@ module.exports.signUp = async (req, res) => {
 
 module.exports.login = async (req, res) => {
   try {
+    console.log(req.body);
     const errors = {};
     if (!validator.isEmail(req.body.email.trim()))
       errors.email = "Email is not valid";
@@ -63,7 +64,7 @@ module.exports.login = async (req, res) => {
       errors.password = "Password is not valid";
     if (Object.keys(errors).length > 0) return res.status(400).json(errors);
 
-    let user = await User.findOne({ username: req.body.username });
+    let user = await User.findOne({ email: req.body.email });
     if (!user) {
       return res
         .status(422)
@@ -81,6 +82,8 @@ module.exports.login = async (req, res) => {
         }),
       });
     } else {
+      console.log("not found user", req.body.email);
+
       return res
         .status(422)
         .json({ success: false, error: "Inavlid username or password" });
