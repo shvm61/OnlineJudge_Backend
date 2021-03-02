@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { exec } = require("child_process");
 const path = require("path");
+const { SUCCESS, FAILURE } = require("../utils/response");
 
 const Code = require("../models/code");
 
@@ -35,20 +36,12 @@ module.exports.codeCompile = async (req, res) => {
       if (stderr) {
         console.error(`exec error: ${stderr}`);
       }
-      return res.status(200).json({
-        success: true,
-        output: stdout,
-        stderror: stderr,
-        error: err,
-        id: codeD.id,
-      });
+      let data = { output: stdout, stderror: stderr, error: err, id: codeD.id };
+      return res.status(200).json(SUCCESS(data));
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error,
-    });
+    return res.status(500).json(FAILURE(error));
   }
 };
 
@@ -57,15 +50,12 @@ module.exports.getCodeById = async (req, res) => {
     const id = req.params.id;
     // console.log(id);
     let code = await Code.findById(id);
-    return res.status(200).json({
-      success: true,
+    let data = {
       code,
-    });
+    };
+    return res.status(200).json(SUCCESS(data));
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error,
-    });
+    return res.status(500).json(FAILURE(error));
   }
 };
